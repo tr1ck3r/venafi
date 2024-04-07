@@ -1,0 +1,221 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tls-protect-cloud
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: demo-deployment
+  namespace: tls-protect-cloud
+  labels:
+    app: web-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-demo
+  template:
+    metadata:
+      labels:
+        app: web-demo
+    spec:
+      containers:
+        - name: web-demo
+          image: tr1ck3r/venafi-demo
+          ports:
+            - name: web
+              containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+  namespace: tls-protect-cloud
+spec:
+  ports:
+    - name: web
+      port: 80
+      targetPort: web
+  selector:
+    app: web-demo
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: venafi-tlspc-issuer
+    cert-manager.io/issuer-kind: VenafiClusterIssuer
+    cert-manager.io/issuer-group: jetstack.io
+    cert-manager.io/common-name: aries.fire.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 2400h
+  name: ingress-aries
+  namespace: tls-protect-cloud
+spec:
+  tls:
+  - hosts:
+    - aries.fire.zodiac.example
+    secretName: ingress-aries-cert
+  rules:
+  - host: aries.fire.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: venafi-tlspc-issuer
+    cert-manager.io/issuer-kind: VenafiClusterIssuer
+    cert-manager.io/issuer-group: jetstack.io
+    cert-manager.io/common-name: gemini.air.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 3072h
+  name: ingress-gemini
+  namespace: tls-protect-cloud
+spec:
+  tls:
+  - hosts:
+    - gemini.air.zodiac.example
+    secretName: ingress-gemini-cert
+  rules:
+  - host: gemini.air.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: venafi-tlspc-issuer
+    cert-manager.io/issuer-kind: VenafiClusterIssuer
+    cert-manager.io/issuer-group: jetstack.io
+    cert-manager.io/common-name: leo.fire.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 3744h
+  name: ingress-leo
+  namespace: tls-protect-cloud
+spec:
+  tls:
+  - hosts:
+    - leo.fire.zodiac.example
+    secretName: ingress-leo-cert
+  rules:
+  - host: leo.fire.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: venafi-tlspc-issuer
+    cert-manager.io/issuer-kind: VenafiClusterIssuer
+    cert-manager.io/issuer-group: jetstack.io
+    cert-manager.io/common-name: libra.air.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 4416h
+  name: ingress-libra
+  namespace: tls-protect-cloud
+spec:
+  tls:
+  - hosts:
+    - libra.air.zodiac.example
+    secretName: ingress-libra-cert
+  rules:
+  - host: libra.air.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: venafi-tlspc-issuer
+    cert-manager.io/issuer-kind: VenafiClusterIssuer
+    cert-manager.io/issuer-group: jetstack.io
+    cert-manager.io/common-name: sagittarius.fire.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 5088h
+  name: ingress-sagittarius
+  namespace: tls-protect-cloud
+spec:
+  tls:
+  - hosts:
+    - sagittarius.fire.zodiac.example
+    secretName: ingress-sagittarius-cert
+  rules:
+  - host: sagittarius.fire.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: venafi-tlspc-issuer
+    cert-manager.io/issuer-kind: VenafiClusterIssuer
+    cert-manager.io/issuer-group: jetstack.io
+    cert-manager.io/common-name: aquarius.air.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 5760h
+  name: ingress-aquarius
+  namespace: tls-protect-cloud
+spec:
+  tls:
+  - hosts:
+    - aquarius.air.zodiac.example
+    secretName: ingress-aquarius-cert
+  rules:
+  - host: aquarius.air.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web

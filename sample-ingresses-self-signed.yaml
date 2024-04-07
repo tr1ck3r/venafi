@@ -1,0 +1,209 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: self-signed
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: demo-deployment
+  namespace: self-signed
+  labels:
+    app: web-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-demo
+  template:
+    metadata:
+      labels:
+        app: web-demo
+    spec:
+      containers:
+        - name: web-demo
+          image: tr1ck3r/venafi-demo
+          ports:
+            - name: web
+              containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+  namespace: self-signed
+spec:
+  ports:
+    - name: web
+      port: 80
+      targetPort: web
+  selector:
+    app: web-demo
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: self-signed-issuer
+    cert-manager.io/common-name: taurus.earth.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 2736h
+  name: ingress-taurus
+  namespace: self-signed
+spec:
+  tls:
+  - hosts:
+    - taurus.earth.zodiac.example
+    secretName: ingress-taurus-cert
+  rules:
+  - host: taurus.earth.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: self-signed-issuer
+    cert-manager.io/common-name: cancer.water.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 3408h
+  name: ingress-cancer
+  namespace: self-signed
+spec:
+  tls:
+  - hosts:
+    - cancer.water.zodiac.example
+    secretName: ingress-cancer-cert
+  rules:
+  - host: cancer.water.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: self-signed-issuer
+    cert-manager.io/common-name: virgo.earth.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 4080h
+  name: ingress-virgo
+  namespace: self-signed
+spec:
+  tls:
+  - hosts:
+    - virgo.earth.zodiac.example
+    secretName: ingress-virgo-cert
+  rules:
+  - host: virgo.earth.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: self-signed-issuer
+    cert-manager.io/common-name: scorpio.water.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 4752h
+  name: ingress-scorpio
+  namespace: self-signed
+spec:
+  tls:
+  - hosts:
+    - scorpio.water.zodiac.example
+    secretName: ingress-scorpio-cert
+  rules:
+  - host: scorpio.water.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: self-signed-issuer
+    cert-manager.io/common-name: capricorn.earth.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 5424h
+  name: ingress-capricorn
+  namespace: self-signed
+spec:
+  tls:
+  - hosts:
+    - capricorn.earth.zodiac.example
+    secretName: ingress-capricorn-cert
+  rules:
+  - host: capricorn.earth.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: self-signed-issuer
+    cert-manager.io/common-name: pisces.water.zodiac.example
+    cert-manager.io/private-key-algorithm: ECDSA
+    cert-manager.io/private-key-size: "256"
+    cert-manager.io/duration: 6096h
+  name: ingress-pisces
+  namespace: self-signed
+spec:
+  tls:
+  - hosts:
+    - pisces.water.zodiac.example
+    secretName: ingress-pisces-cert
+  rules:
+  - host: pisces.water.zodiac.example
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-service
+            port:
+              name: web
